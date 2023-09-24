@@ -1,2 +1,3 @@
 # macOS-Config
+
 macOS configuration for ZSH, Oh-my-zsh, Tmux, etc...
