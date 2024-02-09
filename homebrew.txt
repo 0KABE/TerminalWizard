@@ -1,0 +1,13 @@
+bat
+cmake
+conan
+ffmpeg
+git
+go
+llvm
+neofetch
+plantuml
+python@3.11
+tree
+wget
+zellij
