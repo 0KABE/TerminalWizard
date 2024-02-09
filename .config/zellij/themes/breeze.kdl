@@ -1,0 +1,15 @@
+themes {
+ 	breeze {
+		bg "#3d4143"
+		fg "#fcfcfc"
+		black "#232627"
+		red "#ed1515"
+		green "#11d116"
+		yellow "#f67400"
+		blue "#1d99f3"
+		magenta "#9b59b6"
+		cyan "#1abc9c"
+		white "#fcfcfc"
+ 		orange "#D65D0E"
+ 	}
+}
