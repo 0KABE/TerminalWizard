@@ -48,9 +48,9 @@ zinit lucid wait for \
       OMZP::copyfile
 # Plugins
 zinit for \
-      marlonrichert/zsh-autocomplete \
-      zsh-users/zsh-autosuggestions \
-      zdharma-continuum/fast-syntax-highlighting
+      zdharma-continuum/fast-syntax-highlighting \
+      # marlonrichert/zsh-autocomplete \
+      # zsh-users/zsh-autosuggestions \
 # Docker
 zinit ice as"completion"; zinit snippet OMZP::docker/completions/_docker
 zstyle ':completion:*:*:docker:*' option-stacking yes
@@ -58,6 +58,10 @@ zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
 # Completion
 zinit add-fpath $(brew --prefix)/share/zsh/site-functions
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # Alias
 
