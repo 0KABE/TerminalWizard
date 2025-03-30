@@ -1,6 +1,15 @@
-# macOS-Config
+# TerminalWizard
 
-macOS configuration for Shell environment and tools.
+TerminalWizard for Shell environment and dotfiles
+
+## Initialization
+
+For the first time, run the following command. It will install the necessary tools and set up the environment.
+
+* macOS
+    ```bash
+    ./init_macOS.sh
+    ```
 
 ## Backup to the repository
 
