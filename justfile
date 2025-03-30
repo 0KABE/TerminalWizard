@@ -1,7 +1,7 @@
 default:
     just --list
 
-export_configs DEST_DIR="":
+export DEST_DIR="":
     #!/usr/bin/env bash +x
     set -euo pipefail
     EXPORT_DIR="{{ if DEST_DIR!= '' { DEST_DIR } else { "~/.config" } }}"
@@ -11,7 +11,7 @@ export_configs DEST_DIR="":
     mkdir -p "$EXPORT_DIR"
     cp -r config/* $EXPORT_DIR
 
-backup_configs SRC_DIR="":
+backup SRC_DIR="":
     #!/usr/bin/env bash
     set -euo pipefail
     BACKUP_DIR="{{ if SRC_DIR != '' { SRC_DIR } else { justfile_directory() } }}/config"
