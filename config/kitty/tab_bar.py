@@ -3,8 +3,7 @@ import subprocess
 import sys
 from datetime import datetime, timezone, timedelta
 
-from kitty.fast_data_types import Screen, add_timer, get_boss, get_options
-from kitty.rgb import Color
+from kitty.fast_data_types import Screen, get_options
 from kitty.tab_bar import (
     DrawData,
     ExtraData,
@@ -24,6 +23,9 @@ CLOCK_FG = as_rgb(0x7FBBB3)
 UTC_FG = as_rgb(0x717374)
 OPTS = get_options()
 
+BATTERY_STATUS_CMD = 'pmset -g batt | head -n 1 | cut -d \\\' -f2'
+BATTERY_PERCENT_CMD = 'pmset -g batt | grep -Eo "\\d+%" | cut -d% -f1'
+
 UNPLUGGED_ICONS = {
     10: "󰁺",
     20: "󰁻",
@@ -36,23 +38,17 @@ UNPLUGGED_ICONS = {
     90: "󰂂",
     100: "󱟢",
 }
-PLUGGED_ICONS = {
-    1: "󰂄",
-}
+PLUGGED_ICONS = {1: "󰂄"}
 UNPLUGGED_COLORS = {
-    15: as_rgb(color_as_int(OPTS.color1)),
-    16: as_rgb(color_as_int(OPTS.color15)),
+    0: as_rgb(color_as_int(OPTS.color1)),
+    15: as_rgb(color_as_int(OPTS.color15)),
 }
 PLUGGED_COLORS = {
-    15: as_rgb(color_as_int(OPTS.color1)),
-    16: as_rgb(color_as_int(OPTS.color6)),
-    99: as_rgb(color_as_int(OPTS.color6)),
+    0: as_rgb(color_as_int(OPTS.color1)),
+    15: as_rgb(color_as_int(OPTS.color6)),
     100: as_rgb(0xA7C080),
 }
-BATTERY_STATUS_CMD = 'pmset -g batt | head -n 1 | cut -d \\\' -f2'
-BATTERY_PERCENT_CMD = 'pmset -g batt | grep -Eo "\\d+%" | cut -d% -f1'
 
-# config logger to stdout
 logging.basicConfig(stream=sys.stdout, level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
@@ -74,22 +70,16 @@ def _get_battery_status():
             returncode=p_result.returncode, cmd=p_result.args, stderr=p_result.stderr
         )
 
-    percent = ""
+    percent = 100
     if p_result.stdout:
         percent = int(p_result.stdout.decode("utf-8").strip())
 
     if status.startswith('Battery Power'):
-        icon_color = UNPLUGGED_COLORS[
-            min(UNPLUGGED_COLORS.keys(), key=lambda x: abs(x - percent))
-        ]
-        icon = UNPLUGGED_ICONS[
-            min(UNPLUGGED_ICONS.keys(), key=lambda x: abs(x - percent))
-        ]
+        icon_color = UNPLUGGED_COLORS[max([x for x in UNPLUGGED_COLORS.keys() if x < percent])]
+        icon = UNPLUGGED_ICONS[max([x for x in UNPLUGGED_ICONS.keys() if x < percent])]
     else:
-        icon_color = PLUGGED_COLORS[
-            min(PLUGGED_COLORS.keys(), key=lambda x: abs(x - percent))
-        ]
-        icon = PLUGGED_ICONS[min(PLUGGED_ICONS.keys(), key=lambda x: abs(x - percent))]
+        icon_color = PLUGGED_COLORS[max([x for x in PLUGGED_COLORS.keys() if x < percent])]
+        icon = PLUGGED_ICONS[max([x for x in PLUGGED_ICONS.keys() if x < percent])]
 
     percent_cell = (BAT_TEXT_COLOR, " " + str(percent) + "%")
     icon_cell = (icon_color, icon)
@@ -139,7 +129,6 @@ def _get_status():
         (CLOCK_FG, clock),
         (UTC_FG, utc)
     ]
-    logging.info(f'cells={cached_status}')
     return cached_status
 
 
