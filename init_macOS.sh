@@ -36,8 +36,8 @@ UWhite='\033[4;37m'       # White
 init_brew() {
   echo -e "${UGreen}Init Homebrew${Color_Off}"
   if ! command -v brew &> /dev/null; then
-    yes | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    echo >> $HOME/.zprofile
+    yes | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || exit 1
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.profile
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
@@ -51,7 +51,7 @@ init_fish() {
       /opt/homebrew/bin/brew shellenv | source
       starship init fish | source
     end' > $HOME/.config/fish/config.fish"
-    echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
+    echo "/opt/homebrew/bin/fish" | sudo tee -a /etc/shells
     chsh -s /opt/homebrew/bin/fish
     echo 'restart your operating system to apply changes'
   fi
